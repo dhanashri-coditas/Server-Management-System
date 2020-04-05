@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ServerManagementModelStoreContainer" CdmEntityContainer="ServerManagementEntities">
+    <EntitySetMapping Name="Servers">
+      <EntityTypeMapping TypeName="ServerManagementModel.Server">
+        <MappingFragment StoreEntitySet="Server">
+          <ScalarProperty Name="ServerName" ColumnName="ServerName" />
+          <ScalarProperty Name="Public_Server_IP" ColumnName="Public-Server_IP" />
+          <ScalarProperty Name="Private_Server_IP" ColumnName="Private-Server_IP" />
+          <ScalarProperty Name="ServerID" ColumnName="ServerID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VPNUsers">
+      <EntityTypeMapping TypeName="ServerManagementModel.VPNUser">
+        <MappingFragment StoreEntitySet="VPNUser">
+          <ScalarProperty Name="VPNUserName" ColumnName="VPNUserName" />
+          <ScalarProperty Name="VPNUSerId" ColumnName="VPNUSerId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="spGetSeverInfo" FunctionName="ServerManagementModel.Store.spGetSeverInfo">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ServerManagementModel.spGetSeverInfo_Result">
+          <ScalarProperty Name="Private_Server_IP" ColumnName="Private-Server_IP" />
+          <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+          <ScalarProperty Name="VPNUserName" ColumnName="VPNUserName" />
+          <ScalarProperty Name="ServerID" ColumnName="ServerID" />
+          <ScalarProperty Name="CredentialID" ColumnName="CredentialID" />
+          <ScalarProperty Name="VPNUSerId" ColumnName="VPNUSerId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="Credentials">
+      <EntityTypeMapping TypeName="ServerManagementModel.Credential">
+        <MappingFragment StoreEntitySet="Credentials">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="ModUSer" ColumnName="ModUSer" />
+          <ScalarProperty Name="ModDate" ColumnName="ModDate" />
+          <ScalarProperty Name="CredUser" ColumnName="CredUser" />
+          <ScalarProperty Name="CredDate" ColumnName="CredDate" />
+          <ScalarProperty Name="LoginPwd" ColumnName="LoginPwd" />
+          <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+          <ScalarProperty Name="ServerID" ColumnName="ServerID" />
+          <ScalarProperty Name="CredentialID" ColumnName="CredentialID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Usage_Detail">
+      <EntityTypeMapping TypeName="ServerManagementModel.Usage_Detail">
+        <MappingFragment StoreEntitySet="Usage_Detail">
+          <ScalarProperty Name="LogoutDate" ColumnName="LogoutDate" />
+          <ScalarProperty Name="LoginDate" ColumnName="LoginDate" />
+          <ScalarProperty Name="VPNUSerId" ColumnName="VPNUSerId" />
+          <ScalarProperty Name="CredentialId" ColumnName="CredentialId" />
+          <ScalarProperty Name="ServerID" ColumnName="ServerID" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

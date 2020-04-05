@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ServerManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Credentials">
+    <Key>
+      <PropertyRef Name="CredentialID" />
+    </Key>
+    <Property Name="CredentialID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ServerID" Type="int" Nullable="false" />
+    <Property Name="LoginId" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="LoginPwd" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CredDate" Type="date" />
+    <Property Name="CredUser" Type="date" />
+    <Property Name="ModDate" Type="date" />
+    <Property Name="ModUSer" Type="nvarchar(max)" />
+    <Property Name="Status" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Server">
+    <Key>
+      <PropertyRef Name="ServerID" />
+    </Key>
+    <Property Name="ServerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Private-Server_IP" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Public-Server_IP" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ServerName" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Usage_Detail">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ServerID" Type="int" Nullable="false" />
+    <Property Name="CredentialId" Type="int" Nullable="false" />
+    <Property Name="VPNUSerId" Type="int" />
+    <Property Name="LoginDate" Type="date" />
+    <Property Name="LogoutDate" Type="date" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'ServerManagement.dbo.VPNUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="VPNUser">
+    <Key>
+      <PropertyRef Name="VPNUSerId" />
+      <PropertyRef Name="VPNUserName" />
+    </Key>
+    <Property Name="VPNUSerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VPNUserName" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <Function Name="spGetSeverInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="ServerManagementModelStoreContainer">
+    <EntitySet Name="Credentials" EntityType="Self.Credentials" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Server" EntityType="Self.Server" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Usage_Detail" EntityType="Self.Usage_Detail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VPNUser" EntityType="Self.VPNUser" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [VPNUser].[VPNUSerId] AS [VPNUSerId], 
+    [VPNUser].[VPNUserName] AS [VPNUserName]
+    FROM [dbo].[VPNUser] AS [VPNUser]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>

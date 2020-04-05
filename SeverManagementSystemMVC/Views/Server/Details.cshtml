@@ -1,0 +1,242 @@
+﻿@model IEnumerable<SeverManagementSystemMVC.spGetSeverInfo_Result>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Private_Server_IP)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.LoginId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VPNUserName)
+
+        </th>
+        <th></th>
+    </tr>
+    @{var list = Model.ToList();}
+    @{var groups = list.GroupBy(x => x.Private_Server_IP).Select(x => x); }
+    @foreach (var group in groups)
+    {
+        <tr>
+            <td>
+
+                <a type="button"
+                   class="btn"
+                   href="#article-editor"
+                   id="val"
+                   data-toggle="modal"
+                   onclick="ConfirmationDialog('@group.Key','@group.First().ServerID')">
+                    @group.Key
+                </a>
+
+            </td>
+
+
+            <td>
+                <select id="Medico" name="Medico">
+                    @* @Html.DisplayFor(modelItem => serverInfo.LoginId);*@
+                    @{List<String> loginIds = new List<string>();}
+                    @foreach (var serverInfo in group)
+                    {
+                        if (serverInfo.Status == true)
+                        {
+                            <option id="@serverInfo.LoginId" value="@serverInfo.LoginId" style="background-color: red">@serverInfo.LoginId</option>
+                        }
+                        else
+                        {
+                <option id="@serverInfo.LoginId" value="@serverInfo.LoginId" style="background-color: white">@serverInfo.LoginId</option>
+                        }
+                        //loginIds.Add(serverInfo.LoginId);
+                    }
+
+                </select>
+                    @*@Html.DropDownListFor(m => list[0].LoginId, new SelectList(loginIds), "Select", new { @class = "myClass", style = "width: 250px;" })*@
+
+
+            </td>
+
+            <td>
+                @foreach (var serverInfo in group)
+                {
+                    <span>
+                        @Html.DisplayFor(modelItem => serverInfo.VPNUserName)
+                    </span>
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+
+
+
+
+<form enctype="multipart/form-data" id="form">
+
+    <div class="modal fade" role="dialog" id="mymodal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal">&times;</button>
+
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.Hidden("ServerId")
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="input-sm" id="serverid" name="serverId" disabled  hidden/>
+                        </div>
+                    </div><br />
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.Label("ServerIp : ")
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="input-sm" id="serverip" name="product" disabled />
+                        </div>
+                    </div><br />
+
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.Label("LoginId : ")
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="input-sm" id="loginId" name="loginId" />
+                        </div>
+                    </div><br />
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.Label("Password : ")
+                        </div>
+                        <div class="col-md-3">
+                            <input type="password" class="input-sm" id="password" name="password" />
+                        </div>
+                    </div><br />
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.Label("UserName: ")
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="input-sm" id="vpnusername" name="Vpnusername" />
+                        </div>
+                    </div><br />
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" id="change" onclick="func(this)" name="change">@Html.Label("Login") </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<script>
+
+    function ConfirmationDialog(x,y) {
+
+        $("#mymodal").modal('show');
+
+        $(".modal-body #serverip").val(x);
+        $(".modal-body #serverid").val(y);
+        
+    }
+
+
+    function func(x) {
+        //alert(x);
+         
+        $("#mymodal").modal('hide');
+        var serverId = $("#serverid").val();
+        var serverIp=  $("#serverip").val();
+
+        var loginId = $("#loginId").val();
+        var password = $("#password").val();
+        var vpnusername = $("#vpnusername").val();
+
+    $.ajax({
+        url: '@Url.Content("~/Server/Save/")',
+        type: 'POST',
+    
+        data: { 'LoginId': loginId, 'password': password, 'Username': vpnusername ,'serverId':serverId},
+        success: function (data)
+        {
+            if (data == "failed")
+            {
+
+                alert("Please Enter valid Credentials:");
+                //ConfirmationDialog(serverIp, serverId);
+
+
+               // $("#form")[0].reset();
+               //  $(".modal-body #serverip").val(serverIp);
+               ////  $(this).find('form').trigger('reset');   
+
+                $("#loginId").val("");
+                $("#password").val("");
+                $("#vpnusername").val("");
+
+                $("#mymodal").modal('show');
+              
+            }
+
+             else if (data == "Please try with other credential.")
+            {
+
+                alert("Server is already occupied:");
+                //ConfirmationDialog(serverIp, serverId);
+
+
+               // $("#form")[0].reset();
+               //  $(".modal-body #serverip").val(serverIp);
+               ////  $(this).find('form').trigger('reset');   
+
+                $("#loginId").val("");
+                $("#password").val("");
+                $("#vpnusername").val("");
+
+                $("#mymodal").modal('show');
+              
+            }
+               
+            else
+                 location.reload(true);
+        },
+        error: function (response) {
+            alert("in error" + response);
+                    }
+    });
+}
+
+ 
+
+
+//    $('#myForm').submit(function() {
+//    // get all the inputs into an array.
+//    var $inputs = $('#myForm :input');
+
+//    // not sure if you wanted this, but I thought I'd add it.
+//    // get an associative array of just the values.
+//    var values = {};
+//    $inputs.each(function() {
+//        values[this.name] = $(this).val();
+//    });
+
+//        alert(values);
+
+//});
+
+
+</script>

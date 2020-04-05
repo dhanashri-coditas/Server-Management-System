@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ServerManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="ServerManagementEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Servers" EntityType="ServerManagementModel.Server" />
+    <EntitySet Name="VPNUsers" EntityType="ServerManagementModel.VPNUser" />
+    <FunctionImport Name="spGetSeverInfo" ReturnType="Collection(ServerManagementModel.spGetSeverInfo_Result)" />
+    <EntitySet Name="Credentials" EntityType="ServerManagementModel.Credential" />
+    <EntitySet Name="Usage_Detail" EntityType="ServerManagementModel.Usage_Detail" />
+  </EntityContainer>
+  <EntityType Name="Server">
+    <Key>
+      <PropertyRef Name="ServerID" />
+    </Key>
+    <Property Name="ServerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Private_Server_IP" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Public_Server_IP" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ServerName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="VPNUser">
+    <Key>
+      <PropertyRef Name="VPNUSerId" />
+      <PropertyRef Name="VPNUserName" />
+    </Key>
+    <Property Name="VPNUSerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="VPNUserName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <ComplexType Name="spGetSeverInfo_Result">
+    <Property Type="String" Name="Private_Server_IP" Nullable="true" />
+    <Property Type="String" Name="LoginId" Nullable="true" />
+    <Property Type="String" Name="VPNUserName" Nullable="true" />
+    <Property Type="Int32" Name="ServerID" Nullable="true" />
+    <Property Type="Int32" Name="CredentialID" Nullable="true" />
+    <Property Type="Int32" Name="VPNUSerId" Nullable="true" />
+    <Property Type="Boolean" Name="Status" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="Credential">
+    <Key>
+      <PropertyRef Name="CredentialID" />
+    </Key>
+    <Property Name="CredentialID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ServerID" Type="Int32" Nullable="false" />
+    <Property Name="LoginId" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="LoginPwd" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CredDate" Type="DateTime" Precision="0" />
+    <Property Name="CredUser" Type="DateTime" Precision="0" />
+    <Property Name="ModDate" Type="DateTime" Precision="0" />
+    <Property Name="ModUSer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Usage_Detail">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ServerID" Type="Int32" Nullable="false" />
+    <Property Name="CredentialId" Type="Int32" Nullable="false" />
+    <Property Name="VPNUSerId" Type="Int32" />
+    <Property Name="LoginDate" Type="DateTime" Precision="0" />
+    <Property Name="LogoutDate" Type="DateTime" Precision="0" />
+  </EntityType>
+</Schema>
